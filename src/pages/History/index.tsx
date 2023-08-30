@@ -1,10 +1,10 @@
-// import { useContext } from 'react';
+import { useContext } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import { HistoryContainer, HistoryList, Status } from './styles';
-// import { CycleContext } from '../../context/CyclesContext';
+import { CycleContext } from '../../context/CyclesContext';
 
 export function History() {
-	// const { cycles } = useContext(CycleContext);
-	// utilize cycles on history
+	const { cycles } = useContext(CycleContext);
 
 	return (
 		<HistoryContainer>
@@ -20,46 +20,26 @@ export function History() {
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>Task 1</td>
-							<td>20 minutes</td>
-							<td>2 months from now</td>
-							<td>
-								<Status statusColor="green">Concluded</Status>
-							</td>
-						</tr>
-						<tr>
-							<td>Task 1</td>
-							<td>20 minutes</td>
-							<td>2 months from now</td>
-							<td>
-								<Status statusColor="green">Concluded</Status>
-							</td>
-						</tr>
-						<tr>
-							<td>Task 1</td>
-							<td>20 minutes</td>
-							<td>2 months from now</td>
-							<td>
-								<Status statusColor="red">Failed</Status>
-							</td>
-						</tr>
-						<tr>
-							<td>Task 1</td>
-							<td>20 minutes</td>
-							<td>2 months from now</td>
-							<td>
-								<Status statusColor="yellow">On Going</Status>
-							</td>
-						</tr>
-						<tr>
-							<td>Task 1</td>
-							<td>20 minutes</td>
-							<td>2 months from now</td>
-							<td>
-								<Status statusColor="yellow">On Going</Status>
-							</td>
-						</tr>
+						{cycles.map((cycle) => (
+							<tr key={cycle.id}>
+								<td>{cycle.task}</td>
+								<td>{cycle.minutesAmount} minutes</td>
+								<td>
+									{formatDistanceToNow(cycle.startDate, { addSuffix: true })}
+								</td>
+								<td>
+									{cycle.finishedDate && (
+										<Status statusColor="green">Concluded</Status>
+									)}
+									{cycle.interruptedDate && (
+										<Status statusColor="red">Interrupeted</Status>
+									)}
+									{!cycle.finishedDate && !cycle.interruptedDate && (
+										<Status statusColor="yellow">On Going</Status>
+									)}
+								</td>
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</HistoryList>
